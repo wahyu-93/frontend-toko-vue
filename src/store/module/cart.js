@@ -45,6 +45,28 @@ const cart = {
         });
       });
     },
+
+    cartCount({ commit }) {
+      const token = localStorage.getItem('token');
+
+      Api.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+      Api.get('/cart')
+        .then(response => {
+          commit('GET_CART', response.data.cart)
+        })
+    },
+
+    cartTotal({ commit }) {
+      const token = localStorage.getItem('token');
+
+      Api.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+      Api.get('/cart/total')
+        .then(response => {
+          commit('TOTAL_CART', response.data.total)
+        })
+    }
   },
 
   getters: {
@@ -55,6 +77,10 @@ const cart = {
     cartCount(state) {
       return state.cart.length;
     },
+
+    cartTotal(state) {
+      return state.cartTotal
+    }
   },
 };
 

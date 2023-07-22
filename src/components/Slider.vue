@@ -7,7 +7,11 @@
         :class="{ active: id == 0 }"
         :key="slider.id"
       >
-        <img :src="slider.image" class="d-block w-100 rounded-lg" />
+        <img
+          :src="slider.image"
+          class="rounded-lg"
+          style="width: 100%; height: 700px"
+        />
       </div>
     </div>
     <a
