@@ -164,7 +164,7 @@ export default {
       store.dispatch("order/detailOrder", route.params.snap_token);
     });
 
-    const detailorder = computed(() => {
+    const detailOrder = computed(() => {
       return store.getters["order/detailOrder"];
     });
 
@@ -199,7 +199,7 @@ export default {
       store,
       route,
       router,
-      detailorder,
+      detailOrder,
       productInOrder,
       payment,
     };

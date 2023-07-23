@@ -40,8 +40,8 @@
           <div class="col-md-4 col-5">
             <div class="d-flex justify-content-end">
               <div class="cart-header">
-                <a
-                  href="#"
+                <router-link
+                  :to="{ name: 'cart' }"
                   class="btn search-button btn-md"
                   style="
                     color: #ffffff;
@@ -50,7 +50,7 @@
                   "
                   ><i class="fa fa-shopping-cart"></i> {{ cartCount }} | Rp.
                   {{ moneyFormat(cartTotal) }}
-                </a>
+                </router-link>
               </div>
 
               <div class="account">

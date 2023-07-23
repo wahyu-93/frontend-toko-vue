@@ -35,11 +35,17 @@ const order = {
 
     detailOrder({ commit }, snap_token) {
       const token = localStorage.getItem("token");
+      console.log('tokn')
       Api.defaults.headers.common["Authorization"] = "Bearer " + token;
-      Api.get(`order/${snap_token}`).then((response) => {
-        commit("DETAIL_ORDER", response.data.data);
-        commit("PRODUCT_IN_ORDER", response.data.product);
-      });
+      Api.get(`order/${snap_token}`)
+        .then((response) => {
+          console.log(response.data)
+          commit("DETAIL_ORDER", response.data.data);
+          commit("PRODUCT_IN_ORDER", response.data.product);
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
   },
 

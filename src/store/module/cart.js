@@ -20,6 +20,12 @@ const cart = {
     CART_WEIGHT(state, weight) {
       state.cartWeight = weight;
     },
+
+    CLEAR_CART(state) {
+      state.cart = []
+      state.cartTotal = 0
+      state.cartWeight = 0
+    }
   },
 
   actions: {
@@ -66,6 +72,95 @@ const cart = {
         .then(response => {
           commit('TOTAL_CART', response.data.total)
         })
+    },
+
+    cartWeight({ commit }) {
+      const token = localStorage.getItem('token');
+
+      Api.defaults.headers.common['Authorization'] = 'Bearer ' + token
+
+      Api.get('/cart/totalWeight')
+        .then(response => {
+          commit('CART_WEIGHT', response.data.total)
+        })
+    },
+
+    removeCart({ commit }, id) {
+      const token = localStorage.getItem('token');
+
+      Api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+      Api.post('cart/remove', {
+        cart_id: id
+      })
+        .then(() => {
+          //get cart
+          Api.get('/cart')
+            .then(response => {
+
+              commit('GET_CART', response.data.cart)
+
+            })
+
+          //get total cart
+          Api.get('/cart/total')
+            .then(response => {
+
+              commit('TOTAL_CART', response.data.total)
+
+            })
+
+          //get total cart weight
+          Api.get('/cart/totalWeight')
+            .then(response => {
+
+              commit('CART_WEIGHT', response.data.total)
+
+            })
+        })
+    },
+
+    checkout({ commit }, data) {
+
+      return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('token');
+
+        Api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+        Api.post('/checkout', {
+          courier: data.courier_type,
+          service: data.courier_service,
+          cost: data.courier_cost,
+          weight: data.weight,
+          name: data.name,
+          phone: data.phone,
+          province: data.province_id,
+          city: data.city_id,
+          address: data.address,
+          grand_total: data.grandTotal
+
+        })
+          .then(response => {
+
+            resolve(response.data)
+
+            //remove all Cart  on database
+            Api.post('/cart/removeAll')
+              .then(() => {
+
+                //clear  cart
+                commit('CLEAR_CART')
+
+              })
+              .catch(error => {
+                console.log(error)
+              })
+
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
     }
   },
 
